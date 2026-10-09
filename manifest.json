@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "apiVersion": 1,
+  "id": "muslimtify",
+  "name": "Muslimtify",
+  "version": "1.0.0",
+  "entryPoints": {
+    "service": "Service.qml",
+    "widget": "Widget.qml",
+    "panel": "Panel.qml"
+  },
+  "placement": "left",
+  "dependencies": {
+    "aur": [
+      "muslimtify"
+    ]
+  },
+  "lifecycle": {
+    "enable": "scripts/enable.sh",
+    "disable": "scripts/disable.sh"
+  },
+  "bindings": [
+    {
+      "key": "SUPER + P",
+      "description": "Toggle prayer panel",
+      "action": "toggle-panel"
+    }
+  ],
+  "panelAliases": [
+    "prayer"
+  ]
+}
