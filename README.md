@@ -3,7 +3,7 @@
 Prayer times, tomorrow's next prayer, a countdown, and Muslimtify settings in the Hyprsimple bar. Requires the Hyprsimple external plugin API 1 and the `muslimtify` AUR package. The manager installs missing dependencies.
 
 ```sh
-hyprsimple-plugin install muslimtify-org/muslimtify-hyprsimple
+hyprsimple-plugin muslimtify-org/muslimtify-hyprsimple
 ```
 
 The plugin installs at `~/.local/share/hyprsimple-plugins/muslimtify`. It appears on the left. Click the widget or press `SUPER + P` to toggle the panel. Right click switches between the prayer time and countdown. The panel alias is `prayer`. In the panel, `s` switches settings, `r` refreshes, and Escape leaves settings then closes the panel. Schedule failures show an error while retaining the last usable schedule and retrying.
@@ -29,4 +29,4 @@ The integration check copies the exact core `bin/hyprsimple-dev-optimize-images`
 
 ## Attribution
 
-Extracted from Hyprsimple's existing Muslimtify integration on `feat/external-plugins`, with MIT attribution retained in `LICENSE`. Prayer-specific display constants are owned by this plugin. The core integration remains until Hyprsimple's later migration task.
+Extracted from Hyprsimple's existing Muslimtify integration on `feat/external-plugins`, with MIT attribution retained in `LICENSE`. Prayer-specific display constants are owned by this plugin.
