@@ -1,32 +1,76 @@
 # Muslimtify for Hyprsimple
 
-Prayer times, tomorrow's next prayer, a countdown, and Muslimtify settings in the Hyprsimple bar. Requires the Hyprsimple external plugin API 1 and the `muslimtify` AUR package. The manager installs missing dependencies.
+Prayer times, tomorrow's next prayer, a countdown and Muslimtify settings in the [Hyprsimple](https://github.com/rizukirr/hyprsimple) bar.
+
+## Install
 
 ```sh
 hyprsimple-plugin muslimtify-org/muslimtify-hyprsimple
 ```
 
-The plugin installs at `~/.local/share/hyprsimple-plugins/muslimtify`. It appears on the left. Click the widget to toggle the panel. Right click switches between the prayer time and countdown. The panel alias is `prayer`. The plugin binds no key. To open the panel from the keyboard, add `hl.bind("SUPER + P", hl.dsp.exec_cmd(vars.barPanel .. "prayer"), { description = "Prayer Times (panel)" })` to `~/.config/hypr/bindings/applications.lua`. In the panel, `s` switches settings, `r` refreshes, and Escape leaves settings then closes the panel. Schedule failures show an error while retaining the last usable schedule and retrying.
+This needs Hyprsimple with the external plugin API 1. The manager installs the `muslimtify` AUR package if it is missing, registers the Muslimtify daemon and enables the plugin. The code lands in `~/.local/share/hyprsimple-plugins/muslimtify`.
 
-Enable registers the daemon with `muslimtify daemon install`, then checks `muslimtify daemon status`. Either command failing fails activation so the manager can retry it. Disable uses `muslimtify daemon uninstall` and propagates failures. Disable and removal preserve Muslimtify's configuration and the installed package. The daemon commands must be available in the installed Muslimtify version.
+## Use
 
-Muslimtify saves settings in `${XDG_CONFIG_HOME:-$HOME/.config}/muslimtify/config.json`. The views follow that file and show rejected changes as errors. Hyprsimple plugin enablement, placement and settings live separately in `~/.config/hyprsimple/plugins.json`. This version uses Muslimtify's own settings rather than adding plugin settings.
+The widget sits on the left of the bar.
 
-## Checks
+| Action | Result |
+|---|---|
+| Click the widget | Toggle the panel |
+| Right click the widget | Switch between the prayer time and the countdown |
+| `s` in the panel | Switch to settings |
+| `r` in the panel | Refresh the schedule |
+| Escape | Leave settings, then close the panel |
+
+When the schedule cannot be read, the panel shows the error, keeps the last usable schedule and retries.
+
+## Bind a key
+
+The plugin binds no key. Its panel alias is `prayer`, and the key is yours to choose. Add a line to `~/.config/hypr/bindings/applications.lua`:
+
+```lua
+hl.bind("SUPER + P", hl.dsp.exec_cmd(vars.barPanel .. "prayer"), { description = "Prayer Times (panel)" })
+```
+
+The same panel opens from a terminal or a script:
+
+```sh
+qs -p ~/.local/share/hyprsimple/default/quickshell ipc call bar toggle prayer
+```
+
+## Manage
+
+```sh
+hyprsimple-plugin list
+hyprsimple-plugin update muslimtify
+hyprsimple-plugin disable muslimtify
+hyprsimple-plugin enable muslimtify
+hyprsimple-plugin remove muslimtify
+```
+
+Enable runs `muslimtify daemon install` and then checks `muslimtify daemon status`. If either fails, the plugin stays disabled and `enable` can be run again. Disable runs `muslimtify daemon uninstall`. Disabling or removing the plugin keeps your Muslimtify configuration and the installed package.
+
+## Settings
+
+Location, calculation method, offsets and reminders are Muslimtify's own settings, saved in `${XDG_CONFIG_HOME:-$HOME/.config}/muslimtify/config.json`. The panel's settings view edits that file and shows a rejected change as an error.
+
+Whether the plugin is enabled and where its widget sits are Hyprsimple's, in `~/.config/hyprsimple/plugins.json`. Set `placement` there to `left`, `center` or `right` and restart the bar to move the widget.
+
+## Develop
 
 ```sh
 bash test/check.sh
 HYPRSIMPLE_SOURCE=/path/to/hyprsimple bash test/check.sh
 ```
 
-The first command is self-contained and requires Bash and Node.js. It tests schedule and config parsing, tomorrow transitions, timezone and prayer offsets, countdowns, lifecycle failures and retries, settings preservation and the manifest. ShellCheck runs when installed.
+The first command needs only Bash and Node.js. It tests schedule and config parsing, tomorrow transitions, timezone and prayer offsets, countdowns, lifecycle failures and retries, settings preservation and the manifest. ShellCheck runs when it is installed.
 
-With `HYPRSIMPLE_SOURCE`, integration additionally requires Quickshell, jq, ripgrep and ImageMagick. It commits a scratch snapshot, uses the real manager to install from that local Git repository, and loads the installed code with real Quickshell offscreen. HOME, XDG directories, D-Bus and plugin storage are isolated. Package, daemon, timezone, link opener and desktop commands are stubbed. It verifies disable, re-enable and removal, bindings and preserved application configuration.
+With `HYPRSIMPLE_SOURCE` set to a Hyprsimple checkout, the integration test also runs. It needs Quickshell, jq, ripgrep and ImageMagick. It commits a scratch snapshot of this repository, installs it with the real `hyprsimple-plugin install --local`, and loads the installed code in real Quickshell offscreen. Then it disables, enables and removes the plugin and checks that the application configuration survives. HOME, the XDG directories, D-Bus and plugin storage are isolated. Package, daemon, timezone, link opener and desktop commands are stubbed.
 
-The smoke test compiles and instantiates the actual `Panel.qml`, `Widget.qml`, `Service.qml`, both views and their shared dependencies. Offscreen Quickshell has no PanelWindow backend. A scratch copy of the public module replaces only PopupPanel's window boundary with an Item that provides its context and open/close contract. All other public exports resolve to the core files. No layer-shell windows are created. Compositor focus, positioning and physical monitor behavior are outside this test's scope.
+Offscreen Quickshell has no PanelWindow backend, so the test replaces only PopupPanel's window with an Item that keeps its context and open and close contract. Every other import resolves to the core files. Layer-shell placement, compositor focus and physical monitor behavior need a real Hyprland session.
 
-The integration check copies the exact core `bin/hyprsimple-dev-optimize-images` script into a scratch layout with this plugin's assets and runs its supported `--check` mode there. The optimizer always operates on its own repository root. It never runs against or changes the core checkout. The extracted logo uses WebP to meet that policy while retaining its appearance and transparency.
+The integration test also runs the core's `bin/hyprsimple-dev-optimize-images --check` against this plugin's assets in a scratch copy, so images here meet the same policy as the core's. It never touches the core checkout.
 
 ## Attribution
 
-Extracted from Hyprsimple's existing Muslimtify integration on `feat/external-plugins`, with MIT attribution retained in `LICENSE`. Prayer-specific display constants are owned by this plugin.
+Extracted from Hyprsimple's built-in Muslimtify integration. MIT, see `LICENSE`.
