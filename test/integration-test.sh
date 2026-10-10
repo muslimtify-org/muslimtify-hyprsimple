@@ -53,7 +53,6 @@ manager() { bash "$CORE/.local/bin/hyprsimple-plugin" "$@"; }
 manager install --local "$TMP/source"
 manager validate muslimtify
 jq -e '.plugins.muslimtify.enabled and .plugins.muslimtify.placement == "left"' "$XDG_CONFIG_HOME/hyprsimple/plugins.json" >/dev/null
-jq -e '.bindings[0].pluginId == "muslimtify" and .bindings[0].key == "SUPER + P"' "$XDG_STATE_HOME/hyprsimple/plugins/bindings.json" >/dev/null
 for dir in plugins theme bar components panels system launcher muslimtify notifications; do ln -s "$CORE/default/quickshell/$dir" "$TMP/shell/$dir"; done
 # Offscreen Quickshell has no PanelWindow backend. Replace only the public
 # window boundary in a scratch module. Actual plugin panel and views are loaded.
@@ -188,7 +187,6 @@ jq '.plugins.muslimtify.settings = {keep:"plugin setting"}' "$XDG_CONFIG_HOME/hy
 mv "$TMP/settings" "$XDG_CONFIG_HOME/hyprsimple/plugins.json"
 manager disable muslimtify
 jq -e '.plugins.muslimtify.enabled == false' "$XDG_CONFIG_HOME/hyprsimple/plugins.json" >/dev/null
-jq -e '.bindings == []' "$XDG_STATE_HOME/hyprsimple/plugins/bindings.json" >/dev/null
 manager enable muslimtify
 manager remove muslimtify
 [[ ! -e $HYPRSIMPLE_PLUGIN_ROOT/muslimtify ]]

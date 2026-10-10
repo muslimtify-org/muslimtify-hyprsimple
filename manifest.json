@@ -19,13 +19,6 @@
     "enable": "scripts/enable.sh",
     "disable": "scripts/disable.sh"
   },
-  "bindings": [
-    {
-      "key": "SUPER + P",
-      "description": "Toggle prayer panel",
-      "action": "toggle-panel"
-    }
-  ],
   "panelAliases": [
     "prayer"
   ]

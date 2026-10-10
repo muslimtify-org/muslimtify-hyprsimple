@@ -6,7 +6,7 @@ Prayer times, tomorrow's next prayer, a countdown, and Muslimtify settings in th
 hyprsimple-plugin muslimtify-org/muslimtify-hyprsimple
 ```
 
-The plugin installs at `~/.local/share/hyprsimple-plugins/muslimtify`. It appears on the left. Click the widget or press `SUPER + P` to toggle the panel. Right click switches between the prayer time and countdown. The panel alias is `prayer`. In the panel, `s` switches settings, `r` refreshes, and Escape leaves settings then closes the panel. Schedule failures show an error while retaining the last usable schedule and retrying.
+The plugin installs at `~/.local/share/hyprsimple-plugins/muslimtify`. It appears on the left. Click the widget to toggle the panel. Right click switches between the prayer time and countdown. The panel alias is `prayer`. The plugin binds no key. To open the panel from the keyboard, add `hl.bind("SUPER + P", hl.dsp.exec_cmd(vars.barPanel .. "prayer"), { description = "Prayer Times (panel)" })` to `~/.config/hypr/bindings/applications.lua`. In the panel, `s` switches settings, `r` refreshes, and Escape leaves settings then closes the panel. Schedule failures show an error while retaining the last usable schedule and retrying.
 
 Enable registers the daemon with `muslimtify daemon install`, then checks `muslimtify daemon status`. Either command failing fails activation so the manager can retry it. Disable uses `muslimtify daemon uninstall` and propagates failures. Disable and removal preserve Muslimtify's configuration and the installed package. The daemon commands must be available in the installed Muslimtify version.
 
