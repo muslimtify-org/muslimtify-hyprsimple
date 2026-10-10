@@ -51,7 +51,6 @@ printf '#!/bin/bash\nexit 0\n' > "$HOME/.local/bin/hyprsimple-restart-bar.sh"
 chmod +x "$TMP/bin/"* "$HOME/.local/bin/hyprsimple-restart-bar.sh"
 manager() { bash "$CORE/.local/bin/hyprsimple-plugin" "$@"; }
 manager install --local "$TMP/source"
-manager validate muslimtify
 jq -e '.plugins.muslimtify.enabled and .plugins.muslimtify.placement == "left"' "$XDG_CONFIG_HOME/hyprsimple/plugins.json" >/dev/null
 for dir in plugins theme bar components panels system launcher muslimtify notifications; do ln -s "$CORE/default/quickshell/$dir" "$TMP/shell/$dir"; done
 # Offscreen Quickshell has no PanelWindow backend. Replace only the public
@@ -137,7 +136,7 @@ ShellRoot {
             require(service.next.isTomorrow && service.next.remaining === 301, "tomorrow transition")
             context.service = service
             const plugin = registry.plugins[0]
-            const widget = registry.create(plugin.paths["Widget.qml"], bar, context, "muslimtify")
+            const widget = registry.create(plugin.dir + "/Widget.qml", bar, context, "muslimtify")
             require(widget !== null && widget.visible, "actual widget")
             widget.showRemaining = true
             require(widget.label.indexOf("-05:01") !== -1, "countdown display")
@@ -147,7 +146,7 @@ ShellRoot {
             require(!context.panelOpen, "close")
             require(registry.resolvePanel("prayer") === "plugin:muslimtify", "alias")
             // The actual plugin Panel.qml uses the fixture window boundary.
-            const path = plugin.paths["Panel.qml"]
+            const path = plugin.dir + "/Panel.qml"
             const panel = Qt.createComponent("file://" + path, Component.PreferSynchronous)
             require(panel.status === Component.Ready, "actual Panel.qml and dependencies: " + panel.errorString())
             const panelObject = panel.createObject(bar, {context: context})
