@@ -2,6 +2,8 @@
 
 Prayer times, tomorrow's next prayer, a countdown and Muslimtify settings in the [Hyprsimple](https://github.com/rizukirr/hyprsimple) bar.
 
+https://github.com/user-attachments/assets/6e8a1070-8362-4473-b5af-f1fdba2cbd25
+
 ## Install
 
 ```sh
